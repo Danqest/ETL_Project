@@ -18,13 +18,13 @@ The resulting dataframe is adjusted to add a Ticker column to denote the ticker 
 
 ## Load:
 
-As mentioned previously, the PostgreSQL database is used for this demonstration of ETL. This database was chosen as many different stock's prices for the same (or other varying) dates can be added to a "prices" table, or other stock specific or market data (short availability, industry, sector, etc) can be added to database tables in a relational manner which provides a good use-case. The engine connection was created to load the data into postgres. A declarative_base was used to allow access to metadata and the database was connected using SQLAlchemy. The DataFrame was converted to a dictionary of records and a new instance was created. Session was created and used to handle the new instances and allowed for adding and committing data into the existing dataframe and table. And finally, a query was create to confirm the data was appropriately loaded in to the database.
+As mentioned previously, the PostgreSQL database is used for this demonstration of ETL. This database was chosen as many different stock prices for the same (or other varying) dates can be added to a "prices" table, or other stock specific or market data (short availability, industry, sector, etc) can be added to database tables in a relational manner which provides a good use-case. The engine connection was created to load the data into postgres. A declarative_base was used to allow access to metadata and the database was connected using SQLAlchemy. The DataFrame was converted to a dictionary of records and a new instance was created. Session was created and used to handle the new instances and allowed for adding and committing data into the existing dataframe and table. And finally, a query was created to confirm the data was appropriately loaded in to the database.
 
 # Nasdaq Market News Scraping
 
 ## Purpose:
 
-Market news headlines and associated article URL links are scraped directly from the NASDAQ website using the beautifulsoup4 and requests Python libraries. The raw data is then fed into the ETL process to clean the data and prepare it for laoding into the database, which in this case is MongoDB. This type of headline and URL data could be used in a NLP machine learning or further expanded to scrape data from each individual article's text.
+Market news headlines and associated article URL links are scraped directly from the NASDAQ website using the beautifulsoup4 and requests Python libraries. The raw data is then fed into the ETL process to clean the data and prepare it for loading into the database, which in this case is MongoDB. This type of headline and URL data could be used in a NLP machine learning or further expanded to scrape data from each individual article's text.
 
 ## Extract:
 
