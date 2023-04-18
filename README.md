@@ -16,5 +16,5 @@
 
 ## Transform: variable to_mongo is used to create a Pandas DataFrame by using a for loop looping through the anchor tags and href attribute from the anchor tag and appending to a list of variables named 'names' and 'urls'. The remove() method removes empty entreis from the 'names' and 'urls' variables. A final for loop is used to create the DataFrame by looping through the 'names' list, which has the list of urls. The row is created as a dictionaryu with keys 'article_title' and 'article_url' and values from 'names' and 'urls' lists. After running this loop, the to_mongo DataFrame represents each row with an article title and its corresponding URL. 
 
-## Load: mongo variable is establsihing a connection to a MongoDB server, creating a database and a collection, and converting the data from the to_mongo variable, which is a DataFrame, to a list of dictionaries. 
+## Load: mongo variable is establishing a connection to a MongoDB server, creating a database and a collection, and converting the data from the to_mongo variable, which is a DataFrame, to a list of dictionaries. 
 
