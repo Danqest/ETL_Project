@@ -1,6 +1,6 @@
 # ETL_Project
 
-# Y Finance
+# Y Finance Stock Data
 
 ## Extract: Importing pandas as pd, from sqlalchemy import create_engine, create_engine is a function used for connection to databases, and import yfinance imports the yfinance library for retreiving financial data. yf.downlaod function is used to retreive stock market data for the SPY ticker (S&P 500 ETF) with secified start and end parameters. 
 
@@ -10,7 +10,7 @@
 
 
 
-# Nasdaq Scarping
+# Nasdaq Market Pages Scraping
 
 ## Extract: Using the libraries request and beautifulSoup to make an http request and define variables such as main.url and page when requesting to the url 'https://www.nasdaq.com'. The beautiful soup function is used to parse the HTML content of the page response using HTML parser. The parsed HTML is stored in the variable soup. The a_tags variable will contain a list of all the anchor tags that match the given criteria, which have the class name 'content-feed__card-title-link'. 
 
