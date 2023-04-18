@@ -1,20 +1,39 @@
-# ETL_Project
+# ETL_Project:
 
-# Y Finance Stock Data
+By Arthi Ranganathan, Colin Brooks, Cydney Goodwin-Hamel, Doug Hooper, and Uzma Azhar
 
-## Extract: Importing pandas as pd, from sqlalchemy import create_engine, create_engine is a function used for connection to databases, and import yfinance imports the yfinance library for retreiving financial data. yf.downlaod function is used to retreive stock market data for the SPY ticker (S&P 500 ETF) with secified start and end parameters. 
+# Yahoo Finance Stock Price Data
 
-## Transform: The retreived S&P 500 data is downloaded in a DataFrame as variable name df_spy. A new column is added called ticker and sets its value as 'SPY' using df_spy['ticker'] = 'SPY'. Several columns from the dataframe were renamed to indicate the open, high, low, close, adjusted close, and volume fields. 
+## Purpose:
 
-## Load: A database engine using SQLAlchemy library to connect to a PostgreSQL database with the specified strings such as username, password, hotname, port number, and database name was created. The declarative_base(), engine, engine.connect(), and columns names were created to establish a connection to a PostgreSQL databse, defines a SQLAlchemy model for a table named 'SPYfinance', creates the table in the database, and sets up a sessions object for performing database operations. The df_spy DataFrame was converted into a list of dictionaries where each dictionary represents a row of data from the DataFrame. The to_dict() method of the DataFrame is used with the argument 'records' to specify that the resulting dictionary should have a list of dictionaries with each dictionary representing a record (row) from the DataFrame. Finally, a query was made using the SQLAlchemy engine, loading the data into a Pandas DataFrame using the pd.read_sql_query() function
+Stock price data from Yahoo Finance (YF) is pulled from the yfinance Python library, which scrapes price data from the YF website over a defined start & end date for a particular stock ticker. This raw data is then fed into the ETL process to clean the data and prepare it for loading into the database, which in this case is PostgreSQL. This type of price data could be used in a reinforcement learning model for trading or used for backtesting trading strategies relative to the market.
 
+## Extract:
 
+Stock prices for the SP500 (SPY) were chosen to be downloaded from the yfinance Python libary from the 1/1/2022 start date to the 12/31/2022 end date. This downloaded data is then returned into a pandas dataframe indexed by date.
 
-# Nasdaq Market Pages Scraping
+## Transform:
 
-## Extract: Using the libraries 'request' and 'beautifulSoup' to make an http request and define variables such as 'main.url' to hold the url and 'page' to store the requested url when using the request.get function requesting to 'https://www.nasdaq.com'. The beautiful soup function is used to parse the HTML content of the 'page' response using HTML parser. The parsed HTML is stored in the variable 'soup'. 'soup.find_all()' function is used to fid all occurrences of the HTML element "a" and 'class_' parameter. The 'a_tags' variable will contain a list of all the anchor tags that match the given criteria, which have the class name 'content-feed__card-title-link'. 
+The resulting dataframe is adjusted to add a Ticker column to denote the ticker pulled (SPY) as well as adding the indexed dates to their own column. Other columns (open, high, low, close, volume) are renamed to more unique names (p_open, p_high, p_low, p_close, p_volume) to better align with usage in a database.
 
-## Transform: variable to_mongo is used to create a Pandas DataFrame by using a for loop looping through the anchor tags and href attribute from the anchor tag and appending to a list of variables named 'names' and 'urls'. The remove() method removes empty entreis from the 'names' and 'urls' variables. A final for loop is used to create the DataFrame by looping through the 'names' list, which has the list of urls. The row is created as a dictionaryu with keys 'article_title' and 'article_url' and values from 'names' and 'urls' lists. After running this loop, the to_mongo DataFrame represents each row with an article title and its corresponding URL. 
+## Load:
 
-## Load: mongo variable is establishing a connection to a MongoDB server, creating a database and a collection, and converting the data from the to_mongo variable, which is a DataFrame, to a list of dictionaries. 
+As mentioned previously, the PostgreSQL database is used for this demonstration of ETL. This database was chosen as many different stock's prices for the same (or other varying) dates can be added to a "prices" table, or other stock specific or market data (short availability, industry, sector, etc) can be added to database tables in a relational manner which provides a good use-case. The engine connection was created to load the data into postgres. A declarative_base was used to allow access to metadata and the database was connected using SQLAlchemy. The DataFrame was converted to a dictionary of records and a new instance was created. Session was created and used to handle the new instances and allowed for adding and committing data into the existing dataframe and table. And finally, a query was create to confirm the data was appropriately loaded in to the database.
 
+# Nasdaq Market News Scraping
+
+## Purpose:
+
+Market news headlines and associated article URL links are scraped directly from the NASDAQ website using the beautifulsoup4 and requests Python libraries. The raw data is then fed into the ETL process to clean the data and prepare it for laoding into the database, which in this case is MongoDB. This type of headline and URL data could be used in a NLP machine learning or further expanded to scrape data from each individual article's text.
+
+## Extract:
+
+Using the Python libraries 'request' and 'beautifulSoup' to make a http request and define reusable variables to hold the "nasdaq.com" URL and 'page' to store the requested data when using the request.get function. The beautifulsoup function is used to parse the HTML content of the 'page' response using HTML parser. The parsed HTML is stored in the variable 'soup'. The 'soup.find_all()' function is used to find all occurrences of the anchor element "a" which is consolidated into a list and further parsed for the hrefs (partial URLS) as well as the article titles; urls and titles are the looped into their own lists.
+
+## Transform:
+
+Both of the aformentioned lists are cleaned of invalid (blank) array components and then consolidated into a 'to_mongo' variable, which is a pandas Dataframe; the to_mongo variable appends the partial URLs to the originally defined 'nasdaq.com' variable which ultimately results in a Dataframe with two columns: article_title and article_url (which is a completed url).
+
+## Load:
+
+As mentioned previously, the MongoDB database is used for this demonstration of ETL. This database was chosen as there are no relational components of the data being collected which is simply variations of text data. As the data is non-relational, MongoDB provides a good use-case. The 'mongo' variable is used to establish a connection to a MongoDB server, creating a database and a collection, and converting the data from the to_mongo variable, which is a DataFrame, to a list of dictionaries. The data is then uploaded to the database.
